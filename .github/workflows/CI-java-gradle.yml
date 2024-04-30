@@ -37,14 +37,15 @@ jobs:
       run: ./gradlew clean --refresh-dependencies
 
       # Clear Gradle cache
-    - name: Clear Gradle cache
-      run: |
-        if [[ "${{ runner.os }}" == "Windows" ]]; then
-          Remove-Item -Path $env:USERPROFILE\.gradle\caches -Recurse -Force
-        else
-          rm -rf $HOME/.gradle/caches/
-        fi
-      shell: ${{ runner.os == 'Windows' ? 'pwsh' : 'bash' }}
+    - name: Clear Gradle cache (Windows)
+      if: runner.os == 'Windows'
+      run: Remove-Item -Path $env:USERPROFILE\.gradle\caches -Recurse -Force
+      shell: pwsh
+
+    - name: Clear Gradle cache (Linux/Mac)
+      if: runner.os != 'Windows'
+      run: rm -rf $HOME/.gradle/caches/
+      shell: bash
 
     # Configure Gradle for optimal use in GiHub Actions, including caching of downloaded dependencies.
     # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
