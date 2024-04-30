@@ -39,11 +39,11 @@ jobs:
       # Clear Gradle cache
     - name: Clear Gradle cache
       run: |
-        if [ "$RUNNER_OS" == "Windows" ]; then
-          Remove-Item -Path $env:USERPROFILE\.gradle\caches\ -Recurse -Force
-        else
+        if ($env:RUNNER_OS -eq "Windows") {
+          Remove-Item -Path $env:USERPROFILE\.gradle\caches -Recurse -Force
+        } else {
           rm -rf $HOME/.gradle/caches/
-        fi
+        }
 
     # Configure Gradle for optimal use in GiHub Actions, including caching of downloaded dependencies.
     # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
